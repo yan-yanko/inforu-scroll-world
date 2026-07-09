@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>inforu — העולם של הקשר עם הלקוח</title>
+  <meta name="description" content="גללו כדי להמריא דרך העולם של inforu — הפלטפורמה הנבחרת בישראל לקשר של ארגונים עם הלקוחות." />
+
+  <!-- Hebrew webfonts (graceful fallback to system Hebrew fonts when offline) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@500;700;800&family=Assistant:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ---- inforu theme (matches the generated scenes' background + palette) ---- */
+    :root, .sw-root {
+      --sw-bg: #EDF1FB;            /* == the scene island background */
+      --sw-ink: #0E1430;           /* deep navy text */
+      --sw-ink-soft: #5b6480;
+      --sw-accent: #2E6BFF;        /* inforu blue; each section overrides at runtime */
+      --sw-font-display: 'Rubik', 'Assistant', 'Segoe UI', system-ui, sans-serif;
+      --sw-font-body: 'Assistant', 'Heebo', 'Segoe UI', system-ui, sans-serif;
+    }
+    html, body { margin: 0; background: var(--sw-bg); }
+
+    /* ---- RTL mirroring (unlayered → wins over the engine's @layer sw defaults) ---- */
+    /* Copy block: pin to the right instead of the left. */
+    .sw-root .sw-copy { left: auto; right: clamp(18px, 5vw, 64px); }
+    /* Readability scrim: fade from the right edge. */
+    .sw-root .sw-copylayer::before {
+      left: auto; right: 0;
+      background: linear-gradient(270deg,
+        var(--sw-bg) 0%,
+        color-mix(in srgb, var(--sw-bg) 82%, transparent) 34%,
+        color-mix(in srgb, var(--sw-bg) 40%, transparent) 62%,
+        transparent 100%);
+    }
+    /* Route rail: mirror to the left so it sits opposite the copy. */
+    .sw-root .sw-route { right: auto; left: clamp(14px, 2.4vw, 30px); }
+    .sw-root .sw-route__label {
+      right: auto; left: 24px;
+      transform: translateY(-50%) translateX(-6px);
+    }
+    .sw-root .sw-route__dot:hover .sw-route__label,
+    .sw-root .sw-route__dot.is-active .sw-route__label {
+      transform: translateY(-50%) translateX(0);
+    }
+    /* Numeric section index stays LTR so "01 / 06" reads correctly. */
+    .sw-root .sw-copy__num { direction: ltr; unicode-bidi: isolate; }
+
+    /* Robustness: keep the still poster visible BENEATH the video (video sits at
+       z-index 1 and is opaque when painted). This guarantees a scene never goes
+       blank if a browser/GPU drops the seeked frame of a muted, paused video. */
+    .sw-root .sw-scene.has-clip .sw-scene__still { opacity: 1; }
+
+    @media (max-width: 860px) {
+      /* On phones the copy is full-width bottom; keep the rail on the left edge. */
+      .sw-root .sw-route { left: 6px; right: auto; }
+      /* Bottom scrim covers full width already — flip not needed. */
+      .sw-root .sw-copylayer::before { right: 0; left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div id="top"></div>
+  <div id="world"></div>
+
+  <script src="scrub-engine.js"></script>
+  <script>
+    mountScrollWorld(document.getElementById('world'), {
+      brand: { name: 'inforu', href: '#top' },
+      cta: { label: 'פתחו חשבון', href: '#finale' },
+      hint: 'גללו כדי להמריא',
+      nav: true,
+      atmosphere: true,
+      diveScroll: 1.45,
+      connScroll: 0.9,
+      sections: [
+        {
+          id: 'city', label: 'העיר',
+          still: 'assets/scene-01.webp',
+          clip: 'assets/vid/scene-01.mp4',
+          accent: '#2E6BFF',
+          scroll: 1.75, linger: 0.42,
+          eyebrow: 'הפלטפורמה הנבחרת בישראל',
+          title: 'ככה ארגונים מדברים עם הלקוחות',
+          body: '30,000 עסקים שולחים מיליארדי הודעות בשנה — הכול ממקום אחד.',
+          tags: ['30,000 עסקים', '25+ שנות ניסיון', '250+ אינטגרציות'],
+        },
+        {
+          id: 'channels', label: 'הערוצים',
+          still: 'assets/scene-02.webp',
+          clip: 'assets/vid/scene-02.mp4',
+          accent: '#12B5C9',
+          eyebrow: 'כל הערוצים במקום אחד',
+          title: 'SMS, וואטסאפ, אימייל, פוש וקול',
+          body: 'מנהלים כל ערוץ מאותה מערכת — בלי לקפוץ בין כלים ובלי לאבד לקוח בדרך.',
+          tags: ['חמישה ערוצים', 'ממשק אחד', 'שליחה חכמה'],
+        },
+        {
+          id: 'conversations', label: 'שיחה ושירות',
+          still: 'assets/scene-03.webp',
+          clip: 'assets/vid/scene-03.mp4',
+          accent: '#17B26A',
+          eyebrow: 'וואטסאפ ומוקד שירות',
+          title: 'שיחה אמיתית, בערוץ שהלקוח אוהב',
+          body: 'מוקד שירות, צ׳אטבוט וקמפיינים — הכול על תשתית WhatsApp הרשמית.',
+          tags: ['WhatsApp Business', 'מוקד שירות', 'צ׳אטבוט'],
+        },
+        {
+          id: 'automation', label: 'אוטומציה',
+          still: 'assets/scene-04.webp',
+          clip: 'assets/vid/scene-04.mp4',
+          accent: '#6C5CE7',
+          scroll: 1.55, linger: 0.35,
+          eyebrow: 'מסעות לקוח אוטומטיים',
+          title: 'בונים תרחיש פעם אחת — הוא עובד תמיד',
+          body: 'טריגר, תנאי ושליחה. אוטומציות לאיקומרס, התראות תפעוליות ואימות OTP.',
+          tags: ['Automation', 'OTP', 'התראות'],
+        },
+        {
+          id: 'insights', label: 'נתונים',
+          still: 'assets/scene-05.webp',
+          clip: 'assets/vid/scene-05.mp4',
+          accent: '#0EA5C4',
+          eyebrow: 'נתונים ותובנות בזמן אמת',
+          title: 'רואים בדיוק מה עובד',
+          body: 'מסירה, פתיחה והמרה — הכול שקוף, הכול מדיד, הכול במקום אחד.',
+          tags: ['דוחות חיים', 'בדיקות A/B', 'מסירה גבוהה'],
+        },
+        {
+          id: 'finale', label: 'הפלטפורמה',
+          still: 'assets/scene-06.webp',
+          clip: 'assets/vid/scene-06.mp4',
+          accent: '#FF6A5F',
+          scroll: 1.85, linger: 0.45,
+          eyebrow: 'הכול מתחבר לכאן',
+          title: 'פלטפורמה אחת לכל קשר עם הלקוח',
+          body: 'מצטרפים ל-30,000 העסקים שכבר עובדים עם inforu.',
+          tags: [],
+          cta: {
+            primary:   { label: 'פתחו חשבון', href: 'https://www.inforu.co.il/' },
+            secondary: { label: 'דברו איתנו', href: 'tel:039415550' },
+          },
+        },
+      ],
+      // No AI fly-over connectors yet — the engine crossfades the dives directly.
+      // (Swap in Seedance/Higgsfield connector clips later and list them here.)
+      connectors: [],
+    });
+  </script>
+
+  <script>
+    /* Guarantee the still posters actually load, so the always-visible poster
+       underlay (see CSS) is a real fallback if a browser/GPU drops a video frame.
+       The engine marks the <img> stills loading="lazy"; force them eager so the
+       scene can never show a blank poster. Runs after the engine has built the DOM. */
+    (function eagerPosters() {
+      const warm = () => document.querySelectorAll('.sw-scene__still').forEach((img) => {
+        img.loading = 'eager';
+        if (!img.complete || !img.naturalWidth) {
+          const s = img.getAttribute('src'); if (s) img.setAttribute('src', s); // retrigger load
+        }
+      });
+      // a couple of passes: the engine creates scenes over the first frames
+      warm();
+      setTimeout(warm, 300);
+      setTimeout(warm, 1200);
+    })();
+  </script>
+</body>
+</html>
